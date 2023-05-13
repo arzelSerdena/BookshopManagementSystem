@@ -1,0 +1,15 @@
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\bin\Debug\net7.0\BookshopManagementSystem.exe
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\bin\Debug\net7.0\BookshopManagementSystem.deps.json
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\bin\Debug\net7.0\BookshopManagementSystem.runtimeconfig.json
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\bin\Debug\net7.0\BookshopManagementSystem.dll
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\bin\Debug\net7.0\BookshopManagementSystem.pdb
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.csproj.AssemblyReference.cache
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.AssemblyInfoInputs.cache
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.AssemblyInfo.cs
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.csproj.CoreCompileInputs.cache
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.dll
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\refint\BookshopManagementSystem.dll
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.pdb
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\BookshopManagementSystem.genruntimeconfig.cache
+C:\Users\ACER\Desktop\CODING\GitHub Repositories\BookshopManagementSystem\obj\Debug\net7.0\ref\BookshopManagementSystem.dll

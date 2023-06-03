@@ -19,55 +19,40 @@
         Stock = stock;
     }
 
+    public int AddStock(int quantity)
+    {
+        Stock += quantity;
+        return Stock;
+    }
+    public int ReduceStock(int quantity)
+    {
+        Stock -= quantity;
+        return Stock;
+    }
+
     public override string ToString()
     {
         return $"BookID: {BookID}, Title: {Title}, Author: {Author}, Description: {Description}, Publication: {Publication}, ISBN: {ISBN}, Stock: {Stock}";
     }
 }
 
-public class Bookshop
-{
-    public List<Book> inventory;
 
-    public Bookshop()
-    {
-        inventory = new List<Book>();
-    }
 
-    public void AddBook(Book book)
-    {
-        inventory.Add(book);
-    }
 
-    public void RemoveBook(Book book)
-    {
-        inventory.Remove(book);
-    }
-}
-class Program
+public partial class Program
 {
     static void Main()
     {
-        int book001 = 84;
-        int book002 = 63;
-        int book003 = 57;
-        int book004 = 91;
-        int book005 = 83;
 
-        int index;
+        List<Book> books = new List<Book>();
 
-        Menu();
+        books.Add(new Book("001", "Code Complete", "Steve McConnell", "A guide to writing high-quality software code.", "2004", "978-0735619678", 84));
+        books.Add(new Book("002", "The Pragmatic Programmer", "Andrew Hunt and David Thomas", "A guide to practical programming techniques.", "1999", "978-0201616224", 63));
+        books.Add(new Book("003", "The Mythical Man-Month", "Frederick P. Brooks Jr.", "Discussion on project management and team organization.", "1995", "978-0201835953", 57));
+        books.Add(new Book("004", "Clean Code", "Robert C. Martin", "A guide to writing clean, maintainable, and efficient code.", "2008", "978-0132350884", 91));
+        books.Add(new Book("005", "Object-Oriented Software", "Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides", "A classic book on software design patterns.", "1994", "978-0201633610", 83));
 
-        Bookshop bookshop = new Bookshop();
-
-        bookshop.AddBook(new Book("001", "Code Complete", "Steve McConnell", "A guide to writing high-quality software code.", "2004", "978-0735619678", 84));
-        bookshop.AddBook(new Book("002", "The Pragmatic Programmer", "Andrew Hunt and David Thomas", "A guide to practical programming techniques.", "1999", "978-0201616224", 63));
-        bookshop.AddBook(new Book("003", "The Mythical Man-Month", "Frederick P. Brooks Jr.", "Discussion on project management and team organization.", "1995", "978-0201835953", 57));
-        bookshop.AddBook(new Book("004", "Clean Code", "Robert C. Martin", "A guide to writing clean, maintainable, and efficient code.", "2008", "978-0132350884", 91));
-        bookshop.AddBook(new Book("005", "Object-Oriented Software", "Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides", "A classic book on software design patterns.", "1994", "978-0201633610", 83));
-
-
-        Console.Write("\nEnter your choice: ");
+        DisplayMenu();
         string? userInput = Console.ReadLine();
 
         while (userInput != "0")
@@ -75,244 +60,196 @@ class Program
             switch (userInput)
             {
                 case "1":
+
                     Console.WriteLine("\nSelect a book to view more details.\n");
-                    ViewBooks(bookshop);
+                    ViewBooks(books);
+                    int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-                    string? bookChoice = Console.ReadLine();
-
-                    while (bookChoice != "0")
+                    while (bookChoice >= 0 && bookChoice < books.Count)
                     {
-                        switch (bookChoice)
-                        {
-                            case "1":
-                                index = 0;
+                        BookDisplay(books, bookChoice);
 
-                                BookDisplay(bookshop, index);
-                                ViewBooks(bookshop);
-
-                                bookChoice = Console.ReadLine();
-
-                                break;
-
-                            case "2":
-
-                                index = 1;
-
-                                BookDisplay(bookshop, index);
-                                ViewBooks(bookshop);
-
-                                bookChoice = Console.ReadLine();
-                                break;
-
-                            case "3":
-
-                                index = 2;
-
-                                BookDisplay(bookshop, index);
-                                ViewBooks(bookshop);
-
-                                bookChoice = Console.ReadLine();
-                                break;
-
-                            case "4":
-
-                                index = 3;
-
-                                BookDisplay(bookshop, index);
-                                ViewBooks(bookshop);
-
-                                bookChoice = Console.ReadLine();
-                                break;
-
-                            case "5":
-
-                                index = 4;
-
-                                BookDisplay(bookshop, index);
-                                ViewBooks(bookshop);
-
-                                bookChoice = Console.ReadLine();
-                                break;
-
-
-                            default:
-                                Console.WriteLine("\nInvalid input. Please try again.");
-                                Console.WriteLine("\nSelect a book to view more details.\n");
-                                ViewBooks(bookshop);
-
-                                bookChoice = Console.ReadLine();
-                                break;
-                        }
+                        Console.WriteLine("\nSelect a book to view more details.\n");
+                        ViewBooks(books);
+                        bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
                     }
 
-                    Menu();
-
-                    Console.Write("\nEnter your choice: ");
-                    userInput = Console.ReadLine();
                     break;
-
                 case "2":
-                    ViewStocks(bookshop);
-
-                    Menu();
-
-                    Console.Write("\nEnter your choice: ");
-                    userInput = Console.ReadLine();
+                    ViewStocks(books);
                     break;
-
                 case "3":
-                    Console.WriteLine("\nChoose a book to add stock.\n");
-                    ViewBooks(bookshop);
-
-                    string? bookChoice2 = Console.ReadLine();
-
-                    while (bookChoice2 != "0")
-                    {
-                        switch (bookChoice2)
-                        {
-                            case "1":
-                                Console.Write("Enter number of stock/s to add: ");
-                                int addStocks = Console.Read();
-
-                                book001 += addStocks;
-
-                                Console.WriteLine("\nBook stock has been successfully updated!");
-
-                                Console.WriteLine("\nChoose a book to add stock.\n");
-                                ViewBooks(bookshop);
-
-                                bookChoice2 = Console.ReadLine();
-                                break;
-
-                            case "2":
-                                Console.Write("Enter number of stock/s to add: ");
-                                addStocks = Console.Read();
-
-                                book002 += addStocks;
-                                Console.WriteLine("\nBook stock has been successfully updated!");
-
-                                Console.WriteLine("\nChoose a book to add stock.\n");
-                                ViewBooks(bookshop);
-
-                                bookChoice2 = Console.ReadLine();
-                                break;
-                            case "3":
-                                Console.Write("Enter number of stock/s to add: ");
-                                addStocks = Console.Read();
-
-                                book003 += addStocks;
-                                Console.WriteLine("\nBook stock has been successfully updated!");
-
-                                Console.WriteLine("\nChoose a book to add stock.\n");
-                                ViewBooks(bookshop);
-
-                                bookChoice2 = Console.ReadLine();
-                                break;
-                            case "4":
-                                Console.Write("Enter number of stock/s to add: ");
-                                addStocks = Console.Read();
-
-                                book004 += addStocks;
-                                Console.WriteLine("\nBook stock has been successfully updated!");
-
-                                Console.WriteLine("\nChoose a book to add stock.\n");
-                                ViewBooks(bookshop);
-
-                                bookChoice2 = Console.ReadLine();
-                                break;
-                            case "5":
-                                Console.Write("Enter number of stock/s to add: ");
-                                addStocks = Console.Read();
-
-                                book005 += addStocks;
-                                Console.WriteLine("\nBook stock has been successfully updated!");
-
-                                ViewBooks(bookshop);
-
-                                bookChoice2 = Console.ReadLine();
-                                break;
-
-                            default:
-                                Console.WriteLine("\nInvalid input. Please try again.");
-
-                                ViewBooks(bookshop);
-
-                                bookChoice2 = Console.ReadLine();
-                                break;
-                        }
-                    }
-
-                    Menu();
-
-                    Console.Write("\nEnter your choice: ");
-                    userInput = Console.ReadLine();
-
-
+                    AddStocks(books);
                     break;
-
+                case "4":
+                    AddBooks(books);
+                    break;
+                case "5":
+                    ReduceStocks(books);
+                    break;
+                case "6":
+                    RemoveBooks(books);
+                    break;
                 default:
                     Console.WriteLine("\nInvalid input. Please try again.");
-
-                    Menu();
-
-                    Console.Write("\nEnter your choice: ");
-                    userInput = Console.ReadLine();
                     break;
-
-
-
             }
+            DisplayMenu();
+            userInput = Console.ReadLine();
         }
     }
 
-    static void Menu()
+    static void DisplayMenu()
     {
+        int count = 1;
+
+        string[] menu = new string[6] { "View Books", "View Stock", "Add Stocks", "Add Books", "Reduce Books", "Remove Books" };
+
         Console.WriteLine("\n ------------------------------ ");
         Console.WriteLine("|  BOOKSHOP MANAGEMENT SYSTEM  |");
         Console.WriteLine(" ------------------------------ ");
         Console.WriteLine("\nMENU");
-        Console.WriteLine("1. View Books");
-        Console.WriteLine("2. View Stocks");
-        Console.WriteLine("3. Add Stocks");
+
+        foreach (string option in menu)
+        {
+            Console.WriteLine($"{count}. {option}");
+            count++;
+        }
+
         Console.WriteLine("Press 0 to Exit.");
+
+        Console.Write("\nEnter your choice: ");
+
 
     }
 
-    static void ViewBooks(Bookshop bookshop)
+    static void ViewBooks(List<Book> books)
     {
-        Console.WriteLine($"1. {bookshop.inventory[0].Title}");
-        Console.WriteLine($"2. {bookshop.inventory[1].Title}");
-        Console.WriteLine($"3. {bookshop.inventory[2].Title}");
-        Console.WriteLine($"4. {bookshop.inventory[3].Title}");
-        Console.WriteLine($"5. {bookshop.inventory[4].Title}");
+        int count = 1;
+
+        for (int i = 0; i < books.Count; i++)
+        {
+            Console.WriteLine(count + ". " + books[i].Title);
+            count++;
+        }
         Console.WriteLine("Press 0 to go back to Menu.");
 
         Console.Write("\nEnter your choice: ");
 
+
+
     }
 
-    static void ViewStocks(Bookshop bookshop)
+    static void ViewStocks(List<Book> books)
     {
         Console.WriteLine("\n ---------------------------------------------------------------");
-        Console.WriteLine("| BOOK ID |    BOOK TITLE               |   STOCK   |");
+        Console.WriteLine("| BOOK ID |    BOOK TITLE                           |   STOCK   |");
         Console.WriteLine(" ---------------------------------------------------------------");
-        Console.WriteLine($"|   {bookshop.inventory[0].BookID}   |  {bookshop.inventory[0].Title}                          |      {bookshop.inventory[0].Stock}    |");
-        Console.WriteLine($"|   {bookshop.inventory[1].BookID}   |  {bookshop.inventory[1].Title}               |      {bookshop.inventory[1].Stock}    |");
-        Console.WriteLine($"|   {bookshop.inventory[2].BookID}   |  {bookshop.inventory[2].Title}                 |      {bookshop.inventory[2].Stock}    |");
-        Console.WriteLine($"|   {bookshop.inventory[3].BookID}   |  {bookshop.inventory[3].Title}                             |      {bookshop.inventory[3].Stock}    |");
-        Console.WriteLine($"|   {bookshop.inventory[4].BookID}   |  {bookshop.inventory[4].Title}               |      {bookshop.inventory[4].Stock}    |");
+        Console.WriteLine($"|   {books[0].BookID}   |  {books[0].Title}                          |     {books[0].Stock}    |");
+        Console.WriteLine($"|   {books[1].BookID}   |  {books[1].Title}               |     {books[1].Stock}    |");
+        Console.WriteLine($"|   {books[2].BookID}   |  {books[2].Title}                 |     {books[2].Stock}    |");
+        Console.WriteLine($"|   {books[3].BookID}   |  {books[3].Title}                             |     {books[3].Stock}    |");
+        Console.WriteLine($"|   {books[4].BookID}   |  {books[4].Title}               |     {books[4].Stock}    |");
         Console.WriteLine(" ---------------------------------------------------------------");
+
+
     }
 
-    static void BookDisplay(Bookshop bookshop, int index)
+    static void AddStocks(List<Book> books)
     {
-        Console.WriteLine($"\nBook ID     : {bookshop.inventory[index].BookID}");
-        Console.WriteLine($"Title       : {bookshop.inventory[index].Title}");
-        Console.WriteLine($"Author      : {bookshop.inventory[index].Author}");
-        Console.WriteLine($"Description : {bookshop.inventory[index].Description}");
-        Console.WriteLine($"Publication : {bookshop.inventory[index].Publication}");
-        Console.WriteLine($"ISBN        : {bookshop.inventory[index].ISBN}");
+        Console.WriteLine("\nChoose a book to add stock to.\n");
+        ViewBooks(books);
+        int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-        Console.WriteLine("\nSelect a book to view more details.\n");
+        while (bookChoice >= 0 && bookChoice < books.Count)
+        {
+            Console.Write("Enter the number of stock to add: ");
+            int quantity = (Convert.ToInt32(Console.ReadLine())) - 1;
+
+            Console.WriteLine("Book stock has been successfully updated!");
+            Console.WriteLine($"Book ID {books[bookChoice].BookID}: {books[bookChoice].Title} now has {books[bookChoice].AddStock(quantity)} stocks.");
+
+            Console.WriteLine("\nChoose a book to add stock to.\n");
+            ViewBooks(books);
+            bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
+        }
+    }
+
+    static void AddBooks(List<Book> books)
+    {
+        Console.WriteLine("\nEnter the following information for the new book.");
+        Console.Write("\nBook ID: ");
+        string bookID = Console.ReadLine() ?? string.Empty;
+        Console.Write("Title: ");
+        string title = Console.ReadLine() ?? string.Empty;
+        Console.Write("Author: ");
+        string author = Console.ReadLine() ?? string.Empty;
+        Console.Write("Description: ");
+        string description = Console.ReadLine() ?? string.Empty;
+        Console.Write("Publication: ");
+        string publication = Console.ReadLine() ?? string.Empty;
+        Console.Write("ISBN: ");
+        string isbn = Console.ReadLine() ?? string.Empty;
+        Console.Write("Stock: ");
+        int stock = (Convert.ToInt32(Console.ReadLine())) - 1;
+
+        books.Add(new Book(bookID, title, author, description, publication, isbn, stock));
+
+        Console.WriteLine("\nBook successfully added!");
+
+    }
+
+    static void ReduceStocks(List<Book> books)
+    {
+        Console.WriteLine("\nChoose a book to reduce stock.\n");
+        ViewBooks(books);
+        int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
+
+        while (bookChoice >= 0 && bookChoice < books.Count)
+        {
+            Console.Write("Enter the number of stock to deduct: ");
+            int quantity = (Convert.ToInt32(Console.ReadLine())) - 1;
+
+            Console.WriteLine("\nBook stock has been successfully updated!");
+            Console.WriteLine($"Book ID {books[bookChoice].BookID}: {books[bookChoice].Title} now has {books[bookChoice].ReduceStock(quantity)} stocks.");
+
+            Console.WriteLine("\nChoose a book to reduce stock.\n");
+            ViewBooks(books);
+            bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
+        }
+
+    }
+
+    static void RemoveBooks(List<Book> books)
+    {
+        Console.WriteLine("\nChoose a book to remove.\n");
+        ViewBooks(books);
+        int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
+
+        while (bookChoice >= 0 && bookChoice < books.Count)
+        {
+
+            books.RemoveAt(bookChoice);
+
+            Console.WriteLine("\nBook list has been successfully updated!");
+
+            Console.WriteLine("\nChoose a book to remove.\n");
+            ViewBooks(books);
+            bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
+
+        }
+
+
+    }
+
+    static void BookDisplay(List<Book> books, int bookChoice)
+    {
+        Console.WriteLine($"\nBook ID     : {books[bookChoice].BookID}");
+        Console.WriteLine($"Title       : {books[bookChoice].Title}");
+        Console.WriteLine($"Author      : {books[bookChoice].Author}");
+        Console.WriteLine($"Description : {books[bookChoice].Description}");
+        Console.WriteLine($"Publication : {books[bookChoice].Publication}");
+        Console.WriteLine($"ISBN        : {books[bookChoice].ISBN}");
+
     }
 }

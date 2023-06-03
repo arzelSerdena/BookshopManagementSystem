@@ -1,0 +1,1 @@
+int bookChoice = int.Parse(Console.ReadLine()?.Trim() ?? "0") - 1;

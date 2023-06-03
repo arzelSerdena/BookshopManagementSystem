@@ -1,4 +1,5 @@
-﻿public class Book
+﻿// menu options: View Books, View Stock, Add Stocks, Add Books, Reduce Stock, Remove Books
+public class Book
 {
     public string BookID { get; set; }
     public string Title { get; set; }
@@ -35,9 +36,6 @@
         return $"BookID: {BookID}, Title: {Title}, Author: {Author}, Description: {Description}, Publication: {Publication}, ISBN: {ISBN}, Stock: {Stock}";
     }
 }
-
-
-
 
 public partial class Program
 {
@@ -103,7 +101,7 @@ public partial class Program
     {
         int count = 1;
 
-        string[] menu = new string[6] { "View Books", "View Stock", "Add Stocks", "Add Books", "Reduce Books", "Remove Books" };
+        string[] menu = new string[6] { "View Books", "View Stock", "Add Stocks", "Add Books", "Reduce Stock", "Remove Books" };
 
         Console.WriteLine("\n ------------------------------ ");
         Console.WriteLine("|  BOOKSHOP MANAGEMENT SYSTEM  |");
@@ -119,8 +117,6 @@ public partial class Program
         Console.WriteLine("Press 0 to Exit.");
 
         Console.Write("\nEnter your choice: ");
-
-
     }
 
     static void ViewBooks(List<Book> books)
@@ -135,9 +131,6 @@ public partial class Program
         Console.WriteLine("Press 0 to go back to Menu.");
 
         Console.Write("\nEnter your choice: ");
-
-
-
     }
 
     static void ViewStocks(List<Book> books)
@@ -151,8 +144,6 @@ public partial class Program
         Console.WriteLine($"|   {books[3].BookID}   |  {books[3].Title}                             |     {books[3].Stock}    |");
         Console.WriteLine($"|   {books[4].BookID}   |  {books[4].Title}               |     {books[4].Stock}    |");
         Console.WriteLine(" ---------------------------------------------------------------");
-
-
     }
 
     static void AddStocks(List<Book> books)
@@ -196,7 +187,6 @@ public partial class Program
         books.Add(new Book(bookID, title, author, description, publication, isbn, stock));
 
         Console.WriteLine("\nBook successfully added!");
-
     }
 
     static void ReduceStocks(List<Book> books)
@@ -217,7 +207,6 @@ public partial class Program
             ViewBooks(books);
             bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
         }
-
     }
 
     static void RemoveBooks(List<Book> books)
@@ -238,8 +227,6 @@ public partial class Program
             bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
         }
-
-
     }
 
     static void BookDisplay(List<Book> books, int bookChoice)
@@ -250,6 +237,5 @@ public partial class Program
         Console.WriteLine($"Description : {books[bookChoice].Description}");
         Console.WriteLine($"Publication : {books[bookChoice].Publication}");
         Console.WriteLine($"ISBN        : {books[bookChoice].ISBN}");
-
     }
 }

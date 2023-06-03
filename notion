@@ -1,0 +1,241 @@
+if(month(Today()) = 2, IF(Year(Today()) % 4 = 0, // IF(Year(Today()) % 100 <> 0 OR Year(Today()) % 400 = 0, 29, 28), 28), IF(Month(Today()) = 4 OR Month(Today()) = 6 OR Month(Today()) = 9 OR Month(Today()) = 11, 30, 31))
+
+Explanation: This formula takes into account leap years by checking if the current month is February (month number 2). If it is February, it then checks whether the current year is a leap year by verifying if the year is divisible evenly by 4, but not divisible evenly by 100 unless it is also divisible evenly by 400. If the conditions for a leap year are met, it returns 29 days; otherwise, it returns 28 days for February.
+For all other months, the formula checks if the month is April, June, September, or November (months with 30 days), and returns 30 days. For the remaining months (January, March, May, July, August, October, December), it returns 31 days.
+To use this formula in Notion, follow these steps:
+1.	Create a new formula column in your Notion table or database.
+2.	Paste the formula mentioned above into the formula field for the corresponding column.
+3.	The formula will calculate the number of days for the current month based on the current date.
+Please note that this formula assumes you are using the default Notion date format and that the "Today()" function is available in Notion formulas.
+
+if(((year%4==0) && ((year%400==0) || (year%100!== 0)) { printf("%d is a leap year", &year);
+
+    if(prop("Type") == "Monthly"), 
+        // TRUE
+
+        if(formatDate(now(), “MM”) == “2”, 
+
+            //TRUE
+            if(mod((formatDate(now(), “YYYY”)), 4) == 0, 
+
+                //TRUE
+                or(mod((formatDate(now(), “YYYY”)), 400) == 0, mod((formatDate(now(), “YYYY”)), 100) != 0)), 
+                
+                    //TRUE  
+                    29, 
+                    
+            //FALSE
+            28), 
+
+        // FALSE
+        or(formatDate(now(), “MM”) == 4, formatDate(now(), “MM”) == 6, formatDate(now(), “MM”) == 9, formatDate(now(), “MM”) == 11,), 30, 31),
+    
+        //FALSE
+    0)
+
+if(formatDate(now(), “MM”) == “2”, if(mod((formatDate(now(), “YYYY”)), 4) == 0, or(mod((formatDate(now(), “YYYY”)), 400) == 0, mod((formatDate(now(), “YYYY”)), 100) != 0), 29, 28), or(formatDate(now(), “MM”) == 4, formatDate(now(), “MM”) == 6, formatDate(now(), “MM”) == 9, formatDate(now(), “MM”) == 11,), 30, 31)
+
+
+if(prop("Type") == "Monthly", if(toNumber(formatDate(now(), "MM")) == 2, if(and(mod(toNumber(formatDate(now(), "YYYY")), 4) == 0, or(mod(toNumber(formatDate(now(), "YYYY")), 400) == 0, mod(toNumber(formatDate(now(), "YYYY")), 100) != 0)), 29 * prop("Daily Goal (hours)") * 60, 28 * prop("Daily Goal (hours)") * 60), if(toNumber(formatDate(now(), "MM")) == 4, 30 * prop("Daily Goal (hours)") * 60, if(toNumber(formatDate(now(), "MM")) == 6, 30 * prop("Daily Goal (hours)") * 60, if(toNumber(formatDate(now(), "MM")) == 9, 30 * prop("Daily Goal (hours)") * 60, if(toNumber(formatDate(now(), "MM")) == 11, 30 * prop("Daily Goal (hours)") * 60, 31 * prop("Daily Goal (hours)") * 60))))), 0)
+
+
+if(prop("Grade") > 3.9, "A", if(prop("Grade") > 3.6, "A-", if(prop("Grade") > 3.2, "B+", if(prop("Grade") > 2.9, "B", if(prop("Grade") > 2.6, "B-", if(prop("Grade") > 2.2, "C+", if(prop("Grade") > 1.9, "C", if(prop("Grade") > 1.6, "C-", if(prop("Grade") > 1.2, "D+", if(prop("Grade") > 0.9, "D", if(prop("Grade") > 0.6, "D-", "F")))))))))))
+
+
+if(prop("Grade") > 96, 1.00, if(prop("Grade") > 93, 1.25, if(prop("Grade") > 90, 1.50, if(prop("Grade") > 87, 1.75, if(prop("Grade") > 84, 2.00, if(prop("Grade") > 81, 2.25, if(prop("Grade") > 78, 2.50, if(prop("Grade") > 75, 2.75, if(prop("Grade") > 74, 3.00, 5.00)))))))))
+
+
+if(prop("Value") > 3.9, "A/A+", if(prop("Value") > 3.6, "A-", if(prop("Value") > 3.2, "B+", if(prop("Value") > 2.9, "B", if(prop("Value") > 2.6, "B-", if(prop("Value") > 2.2, "C+", if(prop("Value") > 1.9, "C", if(prop("Value") > 1.6, "C-", if(prop("Value") > 1.2, "D+", if(prop("Value") > 0.9, "D", if(prop("Value") > 0.6, "D-", "F")))))))))))
+
+if(prop("Value") > 4.9, "A/A+", if(prop("Value") > 4.6, "A-", if(prop("Value") > 4.2, "B+", if(prop("Value") > 3.9, "B", if(prop("Value") > 3.6, "B-", if(prop("Value") > 3.2, "C+", if(prop("Value") > 2.9, "C", if(prop("Value") > 2.6, "C-", if(prop("Value") > 2.2, "D+", if(prop("Value") > 1.9, "D", if(prop("Value") > 1.6, "D-", "F")))))))))))
+
+
+if(prop("GPA") > 3.9, "A", if(prop("GPA") > 3.6, "A-", if(prop("GPA") > 3.2, "B+", if(prop("GPA") > 2.9, "B", if(prop("GPA") > 2.6, "B-", if(prop("GPA") > 2.2, "C+", if(prop("GPA") > 1.9, "C", if(prop("GPA") > 1.6, "C-", if(prop("GPA") > 1.2, "D+", if(prop("GPA") > 0.9, "D", if(prop("GPA") > 0.6, "D-", "F")))))))))))
+
+if(prop("AP") == true, if(prop("Grade") == "A" or prop("Grade") == "A+", 5, if(prop("Grade") == "A-", 4.7, if(prop("Grade") == "B+", 4.3, if(prop("Grade") == "B", 4, if(prop("Grade") == "B-", 3.7, if(prop("Grade") == "C+", 3.3, if(prop("Grade") == "C", 3, if(prop("Grade") == "C-", 2.7, if(prop("Grade") == "D+", 2.3, if(prop("Grade") == "D", 2, if(prop("Grade") == "D-", 1.7, 1))))))))))), if(prop("Grade") == "A" or prop("Grade") == "A+", 4, if(prop("Grade") == "A-", 3.7, if(prop("Grade") == "B+", 3.3, if(prop("Grade") == "B", 3, if(prop("Grade") == "B-", 2.7, if(prop("Grade") == "C+", 2.3, if(prop("Grade") == "C", 2, if(prop("Grade") == "C-", 1.7, if(prop("Grade") == "D+", 1.3, if(prop("Grade") == "D", 1, if(prop("Grade") == "D-", 0.7, 0))))))))))))
+
+if(prop("AP") == true, if(prop("Value") > 4.9, "A/A+", if(prop("Value") > 4.6, "A-", if(prop("Value") > 4.2, "B+", if(prop("Value") > 3.9, "B", if(prop("Value") > 3.6, "B-", if(prop("Value") > 3.2, "C+", if(prop("Value") > 2.9, "C", if(prop("Value") > 2.6, "C-", if(prop("Value") > 2.2, "D+", if(prop("Value") > 1.9, "D", if(prop("Value") > 1.6, "D-", "F"))))))))))), if(prop("Value") > 3.9, "A/A+", if(prop("Value") > 3.6, "A-", if(prop("Value") > 3.2, "B+", if(prop("Value") > 2.9, "B", if(prop("Value") > 2.6, "B-", if(prop("Value") > 2.2, "C+", if(prop("Value") > 1.9, "C", if(prop("Value") > 1.6, "C-", if(prop("Value") > 1.2, "D+", if(prop("Value") > 0.9, "D", if(prop("Value") > 0.6, "D-", "F"))))))))))))
+
+
+if(prop("GPA Goal") / prop("GPA") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("GPA") / prop("GPA Goal") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("GPA") / prop("GPA Goal") * 10)) + " " + prop("GPA"))
+
+    round((format(prop("GPA")))*100)/100
+
+    if(prop("GPA Goal") / prop("GPA") < 1, " ", E)
+
+
+
+if(prop("Grade") == "A" or prop("Grade") == "A+", 5, if(prop("Grade") == "A-", 4.7, if(prop("Grade") == "B+", 4.3, if(prop("Grade") == "B", 4, if(prop("Grade") == "B-", 3.7, if(prop("Grade") == "C+", 3.3, if(prop("Grade") == "C", 3, if(prop("Grade") == "C-", 2.7, if(prop("Grade") == "D+", 2.3, if(prop("Grade") == "D", 2, if(prop("Grade") == "D-", 1.7, 1)))))))))))
+
+
+if(prop("Grade") == "A" or prop("Grade") == "A+", 4, if(prop("Grade") == "A-", 3.7, if(prop("Grade") == "B+", 3.3, if(prop("Grade") == "B", 3, if(prop("Grade") == "B-", 2.7, if(prop("Grade") == "C+", 2.3, if(prop("Grade") == "C", 2, if(prop("Grade") == "C-", 1.7, if(prop("Grade") == "D+", 1.3, if(prop("Grade") == "D", 1, if(prop("Grade") == "D-", 0.7, 0)))))))))))
+
+if(prop("Value") == "A" or prop("Value") == "A+", 4, if(prop("Value") == "A-", 3.7, if(prop("Value") == "B+", 3.3, if(prop("Value") == "B", 3, if(prop("Value") == "B-", 2.7, if(prop("Value") == "C+", 2.3, if(prop("Value") == "C", 2, if(prop("Value") == "C-", 1.7, if(prop("Value") == "D+", 1.3, if(prop("Value") == "D", 1, if(prop("Value") == "D-", 0.7, 0)))))))))))
+
+
+
+
+if(prop("Type") == "Daily", mod(toNumber(prop("Total Time (d)")), 60), if(prop("Type") == "Weekly", mod(toNumber(prop("Total Time (w)")), 60), mod(toNumber(prop("Total Time (m)")), 60)))
+
+
+    mod(toNumber(prop("Total Time (d)")), 60)
+
+    * prop("Daily Goal (hours)") * 60
+
+
+    if(prop("Goal (d)") / prop("Total Time (d)") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("Total Time (d)") / prop("Goal (d)") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("Total Time (d)") / prop("Goal (d)") * 10)) + " " + format(round(prop("Total Time (d)") / prop("Goal (d)") * 100)) + "%")
+
+if(prop("Type") == "Daily", if(prop("Goal (d)") / prop("Total Time (d)") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("Total Time (d)") / prop("Goal (d)") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("Total Time (d)") / prop("Goal (d)") * 10)) + " " + format(round(prop("Total Time (d)") / prop("Goal (d)") * 100)) + "%"), if(prop("Type") == "Weekly", if(prop("Goal (w)") / prop("Total Time (w)") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("Total Time (w)") / prop("Goal (w)") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("Total Time (w)") / prop("Goal (w)") * 10)) + " " + format(round(prop("Total Time (w)") / prop("Goal (w)") * 100)) + "%"), if(prop("Goal (m)") / prop("Total Time (m)") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("Total Time (m)") / prop("Goal (m)") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("Total Time (m)") / prop("Goal (m)") * 10)) + " " + format(round(prop("Total Time (m)") / prop("Goal (m)") * 100)) + "%")))
+
+prop("Total Time (m)")
+
+CONDITION 1
+if((prop("Type") == "Monthly"),
+    
+        CONDITION 1.THEN
+        (
+            CONDITION 2 
+            if
+                (
+                    (formatDate(now(), "MM") == 02),
+
+                    CONDITION 2.THEN
+                        (
+                            CONDITION 3
+                            if
+                                (
+
+            
+                                    (and(mod((formatDate(now(), "YYYY")), 4 == 0)),
+                                                (
+                                                or(mod(formatDate(now(), "YYYY"), 400) == 0,
+
+                                                mod(formatDate(now(), "YYYY"), 100) != 0)
+                                                
+                                                )
+                                            )), 
+                    
+                                        CONDITION 3. THEN
+                                            29, 
+                                        CONDITION 3. ELSE
+                                            28)),
+                                                
+                                    CONDITION 2. ELSE
+                                                (if
+                                                    CONDITION 4. IF
+                                                    (or(
+                                                    formatDate(now(), "MM") == 4,
+                                                    formatDate(now(), "MM") == 6,
+                                                    formatDate(now(), "MM") == 9,
+                                                    formatDate(now(), "MM") == 11
+                                                )), 30,31
+                    )
+                            )
+                        ),
+                ) 
+        )
+    CONDITION 1.ELSE
+        0
+    )
+
+
+
+
+    prop("Type") == "Monthly" 
+    ? formatDate(now(), "MM") == 02 
+        ? mod((formatDate(now(), "YYYY"), 4 == 0)) and mod((formatDate(now(), "YYYY")), 400) == 0 or mod((formatDate(now(), “YYYY”)), 100) != 0
+            ? 29
+            : 28
+        : formatDate(now(), “MM”) == 4 or formatDate(now(), “MM”) == 6 or formatDate(now(), “MM”) == 9 or formatDate(now(), “MM”) == 11
+            ? 30
+            : 31
+    : 0
+
+prop("Type") == "Monthly" ? formatDate(now(), "MM") == 02 ? mod((formatDate(now(), "YYYY"), 4 == 0)) and mod((formatDate(now(), “YYYY”)), 400) == 0 or mod((formatDate(now(), “YYYY”)), 100) != 0 ? 29 : 28 : formatDate(now(), “MM”) == 4 or formatDate(now(), “MM”) == 6 or formatDate(now(), “MM”) == 9 or formatDate(now(), “MM”) == 11 ? 30 : 31 : 0
+
+
+
+if(prop("Type") == "Monthly", (if((formatDate(now(), "MM") == 02), (if((and(mod((formatDate(now(), "YYYY"), 4 == 0)), (or(mod((formatDate(now(), "YYYY")), 400) == 0, mod((formatDate(now(), "YYYY")), 100) != 0)))), 29, 28)),(if((or(formatDate(now(), "MM") == 4,formatDate(now(), "MM") == 6,formatDate(now(), "MM") == 9,formatDate(now(), "MM") == 11), 30,31))), 0)))
+
+
+if(prop("Grade") < 5.00, "P", "F")
+
+if(prop("Grade Goal") == 1, 5, if(prop("Grade Goal") == 1.25, T, E))
+
+
+if(round((prop("Grade Goal") / 1)) == 1, 5 - mod(prop("Grade Goal"), 1), if(round((prop("Grade Goal") / 2)) == 1, 4 - mod(prop("Grade Goal"), 1), if(round((prop("Grade Goal") / 3)) == 1, 3 - mod(prop("Grade Goal"), 1, "Invalid")))))
+
+
+if(floor((prop("GPA") / 1)) == 1, 5 - mod(prop("GPA"), 1), if(floor((prop("GPA") / 2)) == 1, 4 - mod(prop("GPA"), 1), if(floor((prop("GPA") / 3)) == 1, 3 - mod(prop("GPA"), 1), 0)))
+
+if(round((prop("GPA") / 1)) == 1, 4 + mod(prop("GPA"), 1), if(round((prop("GPA") / 2)) == 1, 3 + mod(prop("GPA"), 1), if(round((prop("GPA") / 3)) == 1, 2 + mod(prop("GPA"), 1), if(round((prop("GPA") / 4)) == 1, 1 + mod(prop("GPA"), 1), 0))))
+
+if(prop("Convert Goal") / prop("Convert Grade") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("Convert Grade") / prop("Convert Goal") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("Convert Grade") / prop("Convert Goal") * 10)) + "  " + format(round(toNumber(prop("Convert Grade")) * 100) / 100))
+
+if(floor((prop("GPA") / 4)) == 1, 2 - mod(prop("GPA"), 1), if(floor((prop("GPA") / 3)) == 1, 3 - mod(prop("GPA"), 1), if(floor((prop("GPA") / 2)) == 1, 4 - mod(prop("GPA"), 1), if(floor((prop("GPA") / 1)) == 1, 5 - mod(prop("GPA"), 1), 0))))
+
+if(floor((prop("Grade") / 5)) == 1, 1 - mod(prop("Grade"), 1), if(floor((prop("Grade") / 4)) == 1, 2 - mod(prop("Grade"), 1), if(floor((prop("Grade") / 3)) == 1, 3 - mod(prop("Grade"), 1), if(floor((prop("Grade") / 2)) == 1, 4 - mod(prop("Grade"), 1), if(floor((prop("Grade") / 1)) == 1, 5 - mod(prop("Grade"), 1), 0)))))
+
+if(prop("Convert GPA Goal") / prop("Convert GPA") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("Convert GPA") / prop("Convert GPA Goal") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("Convert GPA") / prop("Convert GPA Goal") * 10)) + "  " + format((prop("GPA"))))
+
+
+format(dateBetween())
+
+(dateBetween(now(), prop("Date"), "months")) + (dateBetween(now(), prop("Date"), "days")) + (dateBetween(now(), prop("Date"), "hours")) + (dateBetween(now(), prop("Date"), "minutes"))
+
+format(dateBetween(now(), prop("Date"), "months") + "m ", dateBetween(now(), prop("Date"), "days") + "d " + dateBetween(now(), prop("Date"), "hours") + "h " + dateBetween(now(), prop("Date"), "minutes") + "m")
+
+
+formatDate(now(), "[Month of] MMMM, YYYY") // Output: Month of June, 2022
+
+format(formatDate(dateBetween(now(), prop("Date"), "months[m]")), formatDate(dateBetween(now(), prop("Date"), "[ ]days[d]")), formatDate(dateBetween(now(), prop("Date"), "[ ]hours[h]")), formatDate(dateBetween(now(), prop("Date"), "[ ]minutes[m]")))
+
+formatDate(dateBetween(now(), prop("Date"), "months"), "months[m]")
+
+
+format(prop("Months")) + "m " + format(prop("Days")) + "d " + format(prop("Hours")) + "h " + format(prop("Minutes")) + "m"
+
+format((dateBetween(prop("Date"), now(), "months"))) + "m " + format((dateBetween(prop("Date"), now(), "days"))) + "d " + format((dateBetween(prop("Date"), now(), "hours"))) + "h " + format((dateBetween(prop("Date"), now(), "minutes"))) + "m"
+
+
+if(toNumber(formatDate(prop("Date"), "MM")) == 2, if(and(mod(toNumber(formatDate(prop("Date"), "YYYY")), 4) == 0, or(mod(toNumber(formatDate(prop("Date"), "YYYY")), 400) == 0, mod(toNumber(formatDate(prop("Date"), "YYYY")), 100) != 0)), 29, 28), if(toNumber(formatDate(prop("Date"), "MM")) == 4, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 6, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 9, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 11, 30, 31)))))
+
+
+
+let duration = prop("Countdown");
+let months = floor(duration / (30 * 24 * 60 * 60));
+let days = floor((duration - months * (30 * 24 * 60 * 60)) / (24 * 60 * 60));
+let hours = floor((duration - months * (30 * 24 * 60 * 60) - days * (24 * 60 * 60)) / (60 * 60));
+let minutes = floor((duration - months * (30 * 24 * 60 * 60) - days * (24 * 60 * 60) - hours * (60 * 60)) / 60);
+concat(months, " months, ", days, " days, ", hours, " hours, ", minutes, " minutes")
+
+hours = hours - 
+
+toNumber(dateBetween(prop("Date"), now(), "hours")) - toNumber(dateBetween(prop("Date"), now(), "days")) * 24
+
+
+if(dateBetween(prop("Date"), now(), "days") < 6, "🚨 " + format(prop("Months")) + "m " + format(prop("Days")) + "d " + format(prop("Hours")) + "h " + format(prop("Minutes")) + "m", format(prop("Months")) + "m " + format(prop("Days")) + "d " + format(prop("Hours")) + "h " + format(prop("Minutes")) + "m")
+
+
+if(dateBetween(prop("Deadline"), now(), "days") < 6, "🚨  " + format(toNumber(dateBetween(prop("Deadline"), now(), "months"))) + "m " + format(toNumber(dateBetween(prop("Deadline"), now(), "days")) - toNumber(dateBetween(prop("Deadline"), now(), "months")) * if(toNumber(formatDate(prop("Deadline"), "MM")) == 2, if(and(mod(toNumber(formatDate(prop("Deadline"), "YYYY")), 4) == 0, or(mod(toNumber(formatDate(prop("Deadline"), "YYYY")), 400) == 0, mod(toNumber(formatDate(prop("Deadline"), "YYYY")), 100) != 0)), 29, 28), if(toNumber(formatDate(prop("Deadline"), "MM")) == 4, 30, if(toNumber(formatDate(prop("Deadline"), "MM")) == 6, 30, if(toNumber(formatDate(prop("Deadline"), "MM")) == 9, 30, if(toNumber(formatDate(prop("Deadline"), "MM")) == 11, 30, 31)))))) + "d " + format(toNumber(dateBetween(prop("Deadline"), now(), "hours")) - toNumber(dateBetween(prop("Deadline"), now(), "days")) * 24) + "h " + format(toNumber(dateBetween(prop("Deadline"), now(), "minutes")) - toNumber(dateBetween(prop("Deadline"), now(), "hours")) * 60) + "m left", format(toNumber(dateBetween(prop("Deadline"), now(), "months"))) + "m " + format(toNumber(dateBetween(prop("Deadline"), now(), "days")) - toNumber(dateBetween(prop("Deadline"), now(), "months")) * if(toNumber(formatDate(prop("Deadline"), "MM")) == 2, if(and(mod(toNumber(formatDate(prop("Deadline"), "YYYY")), 4) == 0, or(mod(toNumber(formatDate(prop("Deadline"), "YYYY")), 400) == 0, mod(toNumber(formatDate(prop("Deadline"), "YYYY")), 100) != 0)), 29, 28), if(toNumber(formatDate(prop("Deadline"), "MM")) == 4, 30, if(toNumber(formatDate(prop("Deadline"), "MM")) == 6, 30, if(toNumber(formatDate(prop("Deadline"), "MM")) == 9, 30, if(toNumber(formatDate(prop("Deadline"), "MM")) == 11, 30, 31)))))) + "d " + format(toNumber(dateBetween(prop("Deadline"), now(), "hours")) - toNumber(dateBetween(prop("Deadline"), now(), "days")) * 24) + "h " + format(toNumber(dateBetween(prop("Deadline"), now(), "minutes")) - toNumber(dateBetween(prop("Deadline"), now(), "hours")) * 60) + "m left")
+
+months = toNumber(dateBetween(prop("Date"), now(), "months"))
+days = toNumber(dateBetween(prop("Date"), now(), "days")) - prop("Months") * if(toNumber(formatDate(prop("Date"), "MM")) == 2, if(and(mod(toNumber(formatDate(prop("Date"), "YYYY")), 4) == 0, or(mod(toNumber(formatDate(prop("Date"), "YYYY")), 400) == 0, mod(toNumber(formatDate(prop("Date"), "YYYY")), 100) != 0)), 29, 28), if(toNumber(formatDate(prop("Date"), "MM")) == 4, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 6, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 9, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 11, 30, 31)))))
+hours = toNumber(dateBetween(prop("Date"), now(), "hours")) - toNumber(dateBetween(prop("Date"), now(), "days")) * 24
+minutes = toNumber(dateBetween(prop("Date"), now(), "minutes")) - toNumber(dateBetween(prop("Date"), now(), "hours")) * 60
+
+format(toNumber(dateBetween(prop("Date"), now(), "months"))) + "m " + format(toNumber(dateBetween(prop("Date"), now(), "days")) - prop("Months") * if(toNumber(formatDate(prop("Date"), "MM")) == 2, if(and(mod(toNumber(formatDate(prop("Date"), "YYYY")), 4) == 0, or(mod(toNumber(formatDate(prop("Date"), "YYYY")), 400) == 0, mod(toNumber(formatDate(prop("Date"), "YYYY")), 100) != 0)), 29, 28), if(toNumber(formatDate(prop("Date"), "MM")) == 4, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 6, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 9, 30, if(toNumber(formatDate(prop("Date"), "MM")) == 11, 30, 31)))))) + "d " + format(toNumber(dateBetween(prop("Date"), now(), "hours")) - toNumber(dateBetween(prop("Date"), now(), "days")) * 24) + "h " + format(toNumber(dateBetween(prop("Date"), now(), "minutes")) - toNumber(dateBetween(prop("Date"), now(), "hours")) * 60) + "m left"
+
+if(prop("Type") == "Income", prop("Amount"), if(prop("Type") == "Debt/Receivable", 0, unaryMinus(prop("Amount"))))
+
+if(prop("Type ") == "Received", prop("Amount"), if(prop("Type") == "Payed", unaryMinus(prop("Amount")), 0))
+
+
+if(mod(prop("All Expenses"), 1) != 0, "$" + replace(replace(format(floor(prop("All Expenses"))), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + "." + replace(format(round(prop("All Expenses")*100)/100), ".*\\.(\\w+)$", "$1") + "/" + "$" + if(mod(prop("Budget"), 1) != 0, replace(replace(format(floor(prop("Budget"))), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + "." + replace(format(round(prop("Budget")*100)/100), ".*\\.(\\w+)$", "$1"), replace(replace(format(prop("Budget")), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + ".00"), "$" + replace(replace(format(prop("All Expenses")), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + ".00" + "/" + "$" + if(mod(prop("Budget"), 1) != 0, replace(replace(format(floor(prop("Budget"))), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + "." + replace(format(round(prop("Budget")*100)/100), ".*\\.(\\w+)$", "$1"), "$" + replace(replace(format(prop("Budget")), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + ".00"))
+
+
+if(prop("All Expenses") / prop("Budget") < 1, " ", slice("■■■■■■■■■■", 0, floor(prop("Budget") / prop("All Expenses") * 10)) + slice("▢▢▢▢▢▢▢▢▢▢", 0, ceil(10 - prop("Budget") / prop("All Expenses") * 10)) + " " + format(round(prop("Budget") / prop("All Expenses") * 100)) + "%")
+
+if(mod(prop("Budget") - prop("All Expenses"), 1) != 0, "$" + replace(replace(format(floor(prop("Budget") - prop("All Expenses"))), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + "." + replace(format(round(prop("Budget") - prop("All Expenses")*100)/100), ".*\\.(\\w+)$", "$1"), replace(replace(format(prop("Budget") - prop("All Expenses")), "(\\d{1})(\\d{3})$", "$1,$2"), "(\\d{1})(\\d{3},\\d{3})", "$1,$2") + ".00")
+
+        format(prop("Budget") - prop("All Expenses"))

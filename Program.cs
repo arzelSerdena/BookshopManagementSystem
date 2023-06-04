@@ -37,7 +37,7 @@ public class Book
     }
 }
 
-public partial class Program
+class Program
 {
     static void Main()
     {

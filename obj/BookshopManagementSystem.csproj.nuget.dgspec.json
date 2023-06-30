@@ -37,6 +37,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.0.33, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

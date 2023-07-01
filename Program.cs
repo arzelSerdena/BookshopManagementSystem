@@ -30,8 +30,8 @@ class Program
 
                     Console.WriteLine("\nSelect a book to view more details.\n");
                     ViewBooks(connectionString);
-                    Console.WriteLine("\nPress 0 to Exit");
-                    Console.Write("\nEnter your choice: ");
+
+
                     string bookChoice = Console.ReadLine() ?? string.Empty;
 
 
@@ -42,7 +42,8 @@ class Program
 
                         Console.WriteLine("\nSelect a book to view more details.\n");
                         ViewBooks(connectionString);
-                        Console.WriteLine("\nPress 0 to Exit");
+
+
                         bookChoice = Console.ReadLine() ?? string.Empty;
                     }
                     break;
@@ -118,6 +119,8 @@ class Program
                 Console.WriteLine("Error: " + ex.Message);
             }
         }
+        Console.WriteLine("\nPress 0 to Exit");
+        Console.Write("\nEnter your choice: ");
     }
 
 
@@ -132,13 +135,15 @@ class Program
                 MySqlCommand command = new MySqlCommand(query, connection);
                 MySqlDataReader reader = command.ExecuteReader();
 
+                Console.WriteLine(" ");
+
                 while (reader.Read())
                 {
                     string bookID = reader.GetString("BookID");
                     string title = reader.GetString("Title");
                     int stock = reader.GetInt32("Stock");
 
-                    Console.WriteLine(bookID + ". " + title + " " + stock);
+                    Console.WriteLine(bookID + ". " + title + " - " + stock);
                 }
 
                 reader.Close();
@@ -163,7 +168,7 @@ class Program
                 connection.Open();
                 while (bookChoice != "0")
                 {
-                    Console.Write("Enter the number of stock to deduct: ");
+                    Console.Write("Enter the number of stock to add: ");
                     int quantityToAdd = Convert.ToInt32(Console.ReadLine());
 
                     string selectQuery = $"SELECT * FROM booksDirectory WHERE BookID = {bookChoice}";

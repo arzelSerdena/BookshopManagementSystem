@@ -1,21 +1,54 @@
-﻿using MySql.Data.MySqlClient;
+// menu options: View Books, View Stock, Add Stocks, Add Books, Reduce Stock, Remove Books
+public class Book
+{
+    public string BookID { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public string Description { get; set; }
+    public string Publication { get; set; }
+    public string ISBN { get; set; }
+    public int Stock { get; set; }
+
+    public Book(string bookID, string title, string author, string description, string publication, string isbn, int stock)
+    {
+        BookID = bookID;
+        Title = title;
+        Author = author;
+        Description = description;
+        Publication = publication;
+        ISBN = isbn;
+        Stock = stock;
+    }
+
+    public int AddStock(int quantity)
+    {
+        Stock += quantity;
+        return Stock;
+    }
+    public int ReduceStock(int quantity)
+    {
+        Stock -= quantity;
+        return Stock;
+    }
+
+    public override string ToString()
+    {
+        return $"BookID: {BookID}, Title: {Title}, Author: {Author}, Description: {Description}, Publication: {Publication}, ISBN: {ISBN}, Stock: {Stock}";
+    }
+}
 
 class Program
 {
     static void Main()
     {
-        string connectionString = "server=localhost;database=bookshop_management_system;user=root;password= ;";
-        MySqlConnection connection = new MySqlConnection(connectionString);
 
-        try
-        {
-            connection.Open();
-            Console.WriteLine("Connected to MySQL!");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error: " + ex.Message);
-        }
+        List<Book> books = new List<Book>();
+
+        books.Add(new Book("001", "Code Complete", "Steve McConnell", "A guide to writing high-quality software code.", "2004", "978-0735619678", 84));
+        books.Add(new Book("002", "The Pragmatic Programmer", "Andrew Hunt and David Thomas", "A guide to practical programming techniques.", "1999", "978-0201616224", 63));
+        books.Add(new Book("003", "The Mythical Man-Month", "Frederick P. Brooks Jr.", "Discussion on project management and team organization.", "1995", "978-0201835953", 57));
+        books.Add(new Book("004", "Clean Code", "Robert C. Martin", "A guide to writing clean, maintainable, and efficient code.", "2008", "978-0132350884", 91));
+        books.Add(new Book("005", "Object-Oriented Software", "Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides", "A classic book on software design patterns.", "1994", "978-0201633610", 83));
 
         DisplayMenu();
         string? userInput = Console.ReadLine();
@@ -27,38 +60,33 @@ class Program
                 case "1":
 
                     Console.WriteLine("\nSelect a book to view more details.\n");
-                    ViewBooks(connectionString);
+                    ViewBooks(books);
+                    int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-
-                    string bookChoice = Console.ReadLine() ?? string.Empty;
-
-
-
-                    while (bookChoice != "0")
+                    while (bookChoice >= 0 && bookChoice < books.Count)
                     {
-                        BookDisplay(connectionString, bookChoice);
+                        BookDisplay(books, bookChoice);
 
                         Console.WriteLine("\nSelect a book to view more details.\n");
-                        ViewBooks(connectionString);
-
-
-                        bookChoice = Console.ReadLine() ?? string.Empty;
+                        ViewBooks(books);
+                        bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
                     }
+
                     break;
                 case "2":
-                    ViewStocks(connectionString);
+                    ViewStocks(books);
                     break;
                 case "3":
-                    AddStocks(connectionString);
+                    AddStocks(books);
                     break;
                 case "4":
-                    AddBooks(connectionString);
+                    AddBooks(books);
                     break;
                 case "5":
-                    ReduceStocks(connectionString);
+                    ReduceStocks(books);
                     break;
                 case "6":
-                    RemoveBooks(connectionString);
+                    RemoveBooks(books);
                     break;
                 default:
                     Console.WriteLine("\nInvalid input. Please try again.");
@@ -91,126 +119,54 @@ class Program
         Console.Write("\nEnter your choice: ");
     }
 
-    static void ViewBooks(string connectionString)
+    static void ViewBooks(List<Book> books)
     {
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        int count = 1;
+
+        for (int i = 0; i < books.Count; i++)
         {
-            try
-            {
-                connection.Open();
-                string query = "SELECT BookID, Title FROM booksDirectory";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                MySqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    string BookID = reader.GetString("BookID");
-                    string Title = reader.GetString("Title");
-
-                    Console.WriteLine(BookID + ". " + Title);
-                }
-
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
+            Console.WriteLine(count + ". " + books[i].Title);
+            count++;
         }
-        Console.WriteLine("\nPress 0 to Exit");
+        Console.WriteLine("Press 0 to go back to Menu.");
+
         Console.Write("\nEnter your choice: ");
     }
 
-
-    static void ViewStocks(string connectionString)
+    static void ViewStocks(List<Book> books)
     {
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
-        {
-            try
-            {
-                connection.Open();
-                string query = "SELECT BookID, Title, Stock FROM booksDirectory";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                MySqlDataReader reader = command.ExecuteReader();
-
-                Console.WriteLine(" ");
-
-                while (reader.Read())
-                {
-                    string bookID = reader.GetString("BookID");
-                    string title = reader.GetString("Title");
-                    int stock = reader.GetInt32("Stock");
-
-                    Console.WriteLine(bookID + ". " + title + " - " + stock);
-                }
-
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-        }
+        Console.WriteLine("\n ---------------------------------------------------------------");
+        Console.WriteLine("| BOOK ID |    BOOK TITLE                           |   STOCK   |");
+        Console.WriteLine(" ---------------------------------------------------------------");
+        Console.WriteLine($"|   {books[0].BookID}   |  {books[0].Title}                          |     {books[0].Stock}    |");
+        Console.WriteLine($"|   {books[1].BookID}   |  {books[1].Title}               |     {books[1].Stock}    |");
+        Console.WriteLine($"|   {books[2].BookID}   |  {books[2].Title}                 |     {books[2].Stock}    |");
+        Console.WriteLine($"|   {books[3].BookID}   |  {books[3].Title}                             |     {books[3].Stock}    |");
+        Console.WriteLine($"|   {books[4].BookID}   |  {books[4].Title}               |     {books[4].Stock}    |");
+        Console.WriteLine(" ---------------------------------------------------------------");
     }
 
-    static void AddStocks(string connectionString)
+    static void AddStocks(List<Book> books)
     {
         Console.WriteLine("\nChoose a book to add stock to.\n");
-        ViewBooks(connectionString);
-        string bookChoice = Console.ReadLine() ?? string.Empty;
+        ViewBooks(books);
+        int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        while (bookChoice >= 0 && bookChoice < books.Count)
         {
-            try
-            {
-                connection.Open();
-                while (bookChoice != "0")
-                {
-                    Console.Write("Enter the number of stock to add: ");
-                    int quantityToAdd = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Enter the number of stock to add: ");
+            int quantity = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-                    string selectQuery = $"SELECT * FROM booksDirectory WHERE BookID = {bookChoice}";
-                    MySqlCommand selectCommand = new MySqlCommand(selectQuery, connection);
-                    MySqlDataReader reader = selectCommand.ExecuteReader();
+            Console.WriteLine("Book stock has been successfully updated!");
+            Console.WriteLine($"Book ID {books[bookChoice].BookID}: {books[bookChoice].Title} now has {books[bookChoice].AddStock(quantity)} stocks.");
 
-                    if (reader.Read())
-                    {
-                        int currentStock = reader.GetInt32("Stock");
-                        reader.Close();
-
-                        int updatedStock = currentStock + quantityToAdd;
-
-                        string updateQuery = $"UPDATE booksDirectory SET Stock = {updatedStock} WHERE BookID = {bookChoice}";
-                        MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
-                        int rowsAffected = updateCommand.ExecuteNonQuery();
-
-                        if (rowsAffected != currentStock)
-                        {
-                            Console.WriteLine("\nBook stock has been successfully updated!");
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nFailed to update book stock.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nInvalid book ID. Please choose a valid book.");
-                    }
-
-                    Console.WriteLine("\nChoose a book to add stock to.\n");
-                    ViewBooks(connectionString);
-                    bookChoice = Console.ReadLine() ?? string.Empty;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
+            Console.WriteLine("\nChoose a book to add stock to.\n");
+            ViewBooks(books);
+            bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
         }
     }
 
-    static void AddBooks(string connectionString)
+    static void AddBooks(List<Book> books)
     {
         Console.WriteLine("\nEnter the following information for the new book.");
         Console.Write("\nBook ID: ");
@@ -219,172 +175,67 @@ class Program
         string title = Console.ReadLine() ?? string.Empty;
         Console.Write("Author: ");
         string author = Console.ReadLine() ?? string.Empty;
-        Console.Write("Genre: ");
-        string genre = Console.ReadLine() ?? string.Empty;
-        Console.Write("Publication Date (YYYY-MM-DD): ");
-        string publicationDate = Console.ReadLine() ?? string.Empty;
-        Console.Write("Publisher: ");
-        string publisher = Console.ReadLine() ?? string.Empty;
+        Console.Write("Description: ");
+        string description = Console.ReadLine() ?? string.Empty;
+        Console.Write("Publication: ");
+        string publication = Console.ReadLine() ?? string.Empty;
         Console.Write("ISBN: ");
         string isbn = Console.ReadLine() ?? string.Empty;
-        Console.Write("Price: ");
-        double price = Convert.ToDouble(Console.ReadLine());
         Console.Write("Stock: ");
-        int stock = Convert.ToInt32(Console.ReadLine());
-        double totalValue = Convert.ToDouble(Console.ReadLine());
+        int stock = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
-        {
-            connection.Open();
-
-            // Create the SQL query
-            string query = $"INSERT INTO booksDirectory (BookID, Title, Author, Genre, Publication_Date, Publisher, ISBN, Price, Stock, Total_Value) VALUES ({bookID}, {title}, {author}, {genre}, {publicationDate}, {publisher}, {isbn}, {price}, {stock}, {totalValue});";
-            MySqlCommand command = new MySqlCommand(query, connection);
-            command.ExecuteNonQuery();
-        }
+        books.Add(new Book(bookID, title, author, description, publication, isbn, stock));
 
         Console.WriteLine("\nBook successfully added!");
     }
 
-    static void ReduceStocks(string connectionString)
+    static void ReduceStocks(List<Book> books)
     {
         Console.WriteLine("\nChoose a book to reduce stock.\n");
-        ViewBooks(connectionString);
-        string bookChoice = Console.ReadLine() ?? string.Empty;
+        ViewBooks(books);
+        int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        while (bookChoice >= 0 && bookChoice < books.Count)
         {
-            try
-            {
-                connection.Open();
-                while (bookChoice != "0")
-                {
-                    Console.Write("Enter the number of stock to deduct: ");
-                    int quantityToRemove = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Enter the number of stock to deduct: ");
+            int quantity = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-                    string selectQuery = $"SELECT * FROM booksDirectory WHERE BookID = {bookChoice}";
-                    MySqlCommand selectCommand = new MySqlCommand(selectQuery, connection);
-                    MySqlDataReader reader = selectCommand.ExecuteReader();
+            Console.WriteLine("\nBook stock has been successfully updated!");
+            Console.WriteLine($"Book ID {books[bookChoice].BookID}: {books[bookChoice].Title} now has {books[bookChoice].ReduceStock(quantity)} stocks.");
 
-                    if (reader.Read())
-                    {
-                        int currentStock = reader.GetInt32("Stock");
-                        reader.Close();
-
-                        int updatedStock = currentStock - quantityToRemove;
-
-                        string updateQuery = $"UPDATE booksDirectory SET Stock = {updatedStock} WHERE BookID = {bookChoice}";
-                        MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
-                        int rowsAffected = updateCommand.ExecuteNonQuery();
-
-                        if (rowsAffected != currentStock)
-                        {
-                            Console.WriteLine("\nBook stock has been successfully updated!");
-                        }
-                        else
-                        {
-                            Console.WriteLine("\nFailed to update book stock.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nInvalid book ID. Please choose a valid book.");
-                    }
-
-                    Console.WriteLine("\nChoose a book to reduce stock.\n");
-                    ViewBooks(connectionString);
-                    bookChoice = Console.ReadLine() ?? string.Empty;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
+            Console.WriteLine("\nChoose a book to reduce stock.\n");
+            ViewBooks(books);
+            bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
         }
     }
 
-    static void RemoveBooks(string connectionString)
+    static void RemoveBooks(List<Book> books)
     {
         Console.WriteLine("\nChoose a book to remove.\n");
-        ViewBooks(connectionString);
-        string bookChoice = Console.ReadLine() ?? string.Empty;
+        ViewBooks(books);
+        int bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        while (bookChoice >= 0 && bookChoice < books.Count)
         {
 
-            try
-            {
-                while (bookChoice != "0")
-                {
-                    connection.Open();
-                    string query = $"DELETE FROM booksDirectory WHERE BookID = {bookChoice}";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    int rowsAffected = command.ExecuteNonQuery();
+            books.RemoveAt(bookChoice);
 
-                    Console.WriteLine("\nBook list has been successfully updated!");
+            Console.WriteLine("\nBook list has been successfully updated!");
 
-                    Console.WriteLine("\nChoose a book to remove.\n");
-                    ViewBooks(connectionString);
-                    bookChoice = Console.ReadLine() ?? string.Empty;
-                }
+            Console.WriteLine("\nChoose a book to remove.\n");
+            ViewBooks(books);
+            bookChoice = (Convert.ToInt32(Console.ReadLine())) - 1;
 
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
         }
     }
 
-    static void BookDisplay(string connectionString, string bookChoice)
+    static void BookDisplay(List<Book> books, int bookChoice)
     {
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
-        {
-            try
-            {
-                connection.Open();
-                string query = $"SELECT * FROM booksDirectory WHERE BookID = {bookChoice}";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                MySqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    string bookId = reader.GetString("BookID");
-                    string title = reader.GetString("Title");
-                    string author = reader.GetString("Author");
-                    string genre = reader.GetString("Genre");
-                    string publicationDate = reader.GetString("Publication_Date");
-                    string publisher = reader.GetString("Publisher");
-                    string isbn = reader.GetString("ISBN");
-                    double price = reader.GetDouble("Price");
-                    int stock = reader.GetInt32("Stock");
-                    double totalValue = reader.GetDouble("Total_Value");
-
-                    Console.WriteLine($"\nBook ID           : {bookId}");
-                    Console.WriteLine($"Title             : {title}");
-                    Console.WriteLine($"Author            : {author}");
-                    Console.WriteLine($"Genre             : {genre}");
-                    Console.WriteLine($"Publication Date  : {publicationDate}");
-                    Console.WriteLine($"Publisher         : {publisher}");
-                    Console.WriteLine($"ISBN              : {isbn}");
-                    Console.WriteLine($"Price             : {price}");
-                    Console.WriteLine($"Stock             : {stock}");
-                    Console.WriteLine($"Total Value       : {totalValue}");
-                }
-                else
-                {
-                    Console.WriteLine($"Row with ID {bookChoice} not found.");
-                }
-
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-        }
+        Console.WriteLine($"\nBook ID     : {books[bookChoice].BookID}");
+        Console.WriteLine($"Title       : {books[bookChoice].Title}");
+        Console.WriteLine($"Author      : {books[bookChoice].Author}");
+        Console.WriteLine($"Description : {books[bookChoice].Description}");
+        Console.WriteLine($"Publication : {books[bookChoice].Publication}");
+        Console.WriteLine($"ISBN        : {books[bookChoice].ISBN}");
     }
-
-
 }

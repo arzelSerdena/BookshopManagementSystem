@@ -1,6 +1,4 @@
-﻿//tabular data not in table form and output not organized
-
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
 class Program
 {

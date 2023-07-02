@@ -1,0 +1,50 @@
+public class Book
+{
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public string Genre { get; set; }
+    public DateOnly PublicationDate { get; set; }
+    public string Publisher { get; set; }
+    public string ISBN { get; set; }
+    public double Price { get; set; }
+    public int Stock { get; set; }
+    public double TotalValue { get; set; }
+    public string ProductCode { get; set; }
+
+    public Book(string title, string author, string genre, DateOnly publicationDate, string publisher, string isbn, double price, int stock, double totalValue, string productCode)
+    {
+
+        Title = title;
+        Author = author;
+        Genre = genre;
+        PublicationDate = publicationDate;
+        Publisher = publisher;
+        ISBN = isbn;
+        Price = price;
+        Stock = stock;
+        TotalValue = price * stock;
+        ProductCode = productCode;
+    }
+
+    public int AddStock(int quantity)
+    {
+        Stock += quantity;
+        return Stock;
+    }
+    public int ReduceStock(int quantity)
+    {
+        Stock -= quantity;
+        return Stock;
+    }
+
+    public double GetTotalValue(double price, int stock)
+    {
+        double totalValue = price * stock;
+        return totalValue;
+    }
+
+    public override string ToString()
+    {
+        return $"Title: {Title}, Author: {Author}, Genre: {Genre}, Publication Date: {PublicationDate}, Publisher: {Publisher}, ISBN: {ISBN}, Price: {Price}, Stock: {Stock}, Total Value: {TotalValue}, Product Code: {ProductCode}";
+    }
+}

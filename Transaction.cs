@@ -47,6 +47,19 @@ public class Transaction
         }
         return amountDue;
 
+    }
+
+    public (List<BookPurchase> purchases, List<Transaction> transactions, int i) NewTransaction(List<BookPurchase> purchases, List<Transaction> transactions, Transaction transaction, double amountOfCashPayment, double amountDue)
+    {
+
+        double changeDue = amountOfCashPayment - amountDue;
+        int transactionNumber = transactions.Count + 1;
+
+        transactions.Add(new Transaction(transaction.GetDate(), transactionNumber, transaction.GetNumberOfItems(purchases), amountDue, amountOfCashPayment, changeDue));
+
+        int i = transactions.FindIndex(transaction => transaction.TransactionNumber == transactionNumber);
+
+        return (purchases, transactions, i);
 
     }
 

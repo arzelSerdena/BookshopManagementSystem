@@ -1,0 +1,24 @@
+
+1.	Pogram
+    1.1.	Main
+2.	Menu
+    2.1.	Book Stock
+    2.2.	Orders
+    2.3.	Bills
+3.	BookStocks
+    3.1.	View Books – books have title, bookID, author, publication date, publisher, isbn, price
+    3.2.	View Stocks
+    3.3.	Add stocks of a book
+    3.4.	Add a Book
+    3.5.	Reduce stock of a book
+    3.6.	Remove a Book
+    3.7.	View details of a book
+4.	Orders
+    4.1.	New order – orders have bookID, date of order, orderID, order quantity, total amount of order
+    4.2.	Remove an order
+    4.3.	View Orders
+5.	Bill
+    5.1.	New bill – bills have date of transaction, transaction number, list of book orders, total number of items, amount due, amount of payment, change due
+    5.2.	Remove a bill
+    5.3.	Generate receipt
+    5.4.	View Bills

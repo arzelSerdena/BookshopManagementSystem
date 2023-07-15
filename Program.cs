@@ -6,6 +6,8 @@ class Program
 
     static Book book = null!;
 
+    static Order order = null!;
+
     static void Main()
     {
         List<Transaction> transactions = new List<Transaction>();
@@ -20,7 +22,7 @@ class Program
             switch (userInput)
             {
                 case "1":
-                    NewTransaction(transactions);
+                    NewTransaction();
                     break;
                 case "2":
 
@@ -63,98 +65,108 @@ class Program
         }
     }
 
-    static void NewTransaction(List<Transaction> transactions)
+    static void NewTransaction()
     {
-        transaction = new Transaction();
-        List<BookPurchase> purchases = new List<BookPurchase>();
+        int transactionNumber = transaction.GetTransactionNumber();
 
-        using (MySqlConnection connection = new MySqlConnection("server=localhost;database=bookshop_management_system;user=root;password= ;"))
+        string date = transaction.GetDate();
+
+        bool run = true;
+        int userInput = 0;
+
+        while (run == true)
         {
-            connection.Open();
-            bool run = true;
-            int userInput = 0;
+            Console.Write("\nEnter BookID or Press 0 to Exit: ");
+            string bookChoice = Console.ReadLine() ?? string.Empty;
 
-            while (run == true)
+            if (bookChoice == "0")
             {
-                Console.Write("\nEnter BookID or Press 0 to Exit: ");
-                string bookChoice = Console.ReadLine() ?? string.Empty;
+                run = false;
+            }
 
-                if (bookChoice == "0")
+            MySqlDataReader reader = book.BookExists(bookChoice);
+
+            if (reader.Read())
+            {
+                bookChoice = reader.GetString("BookID");
+                string title = reader.GetString("Title");
+                double price = reader.GetDouble("Price");
+                int stock = reader.GetInt32("Stock");
+
+                reader.Close();
+
+                if (stock == 0)
                 {
-                    run = false;
-                }
-
-                MySqlDataReader reader = book.BookExists(bookChoice);
-
-                if (reader.Read())
-                {
-                    bookChoice = reader.GetString("BookID");
-                    string title = reader.GetString("Title");
-                    double price = reader.GetDouble("Price");
-                    int stock = reader.GetInt32("Stock");
-
-                    reader.Close();
-
-                    if (stock == 0)
-                    {
-                        Console.WriteLine("Books is out of stock. Please pick another book.");
-                    }
-                    else
-                    {
-                        Console.Write("\nEnter quantity to order: ");
-                        int orderQuantity = Convert.ToInt32(Console.ReadLine());
-
-                        if (orderQuantity > stock)
-                        {
-                            Console.WriteLine($"\nBook insufficient stock. Stock available is {stock} only.");
-                        }
-                        else
-                        {
-                            book.UpdateStockFromOrder(stock, orderQuantity, bookChoice);
-
-                            purchases.Add(new BookPurchase(title, price, orderQuantity, orderQuantity * price));
-
-                            Console.WriteLine("\nChoose what to do next.");
-                            Console.WriteLine("1. Add more orders.");
-                            Console.WriteLine("2. Proceed to checkout.");
-                            Console.WriteLine("Press 0 to cancel this transaction.\n");
-                            Console.Write("\nEnter your choice: ");
-                            userInput = Convert.ToInt32(Console.ReadLine());
-
-                            if (userInput == 0)
-                            {
-                                run = false;
-                            }
-                            else if (userInput == 2)
-                            {
-                                double amountDue = transaction.GetAmountDue(purchases);
-                                Console.WriteLine($"\nAmount Due: {amountDue}");
-                                Console.Write("\nEnter cash amount: ");
-                                double amountOfCashPayment = Convert.ToInt32(Console.ReadLine());
-                                while (amountOfCashPayment < amountDue)
-                                {
-                                    Console.WriteLine($"\nInsufficient cash. Your amount due is {amountDue}.");
-                                    Console.Write("\nEnter cash amount: ");
-                                    amountOfCashPayment = Convert.ToInt32(Console.ReadLine());
-                                }
-
-                                var (updatedPurchases, updatedTransactions, i) = transaction.NewTransaction(purchases, transactions, transaction, amountOfCashPayment, amountDue);
-
-
-                                PrintReceipt(updatedPurchases, updatedTransactions, i);
-                            }
-                        }
-                    }
+                    Console.WriteLine("Books is out of stock. Please pick another book.");
                 }
                 else
                 {
-                    Console.WriteLine("\nBook not found. Please check BookID.");
+                    Console.Write("\nEnter quantity to order: ");
+                    int orderQuantity = Convert.ToInt32(Console.ReadLine());
 
+                    if (orderQuantity > stock)
+                    {
+                        Console.WriteLine($"\nBook insufficient stock. Stock available is {stock} only.");
+                    }
+                    else
+                    {
+                        book.UpdateStockFromOrder(stock, orderQuantity, bookChoice);
+
+                        double orderAmount = price * orderQuantity;
+
+                        int orderID = order.GetOrderID();
+
+                        order.SendOrderToMySQL(transactionNumber, date, bookChoice, title, price, orderQuantity, orderAmount);
+
+                        Console.WriteLine("\nChoose what to do next.");
+                        Console.WriteLine("1. Add more orders.");
+                        Console.WriteLine("2. Proceed to checkout.");
+                        Console.WriteLine("Press 0 to cancel this transaction.\n");
+                        Console.Write("\nEnter your choice: ");
+                        userInput = Convert.ToInt32(Console.ReadLine());
+
+                        if (userInput == 0)
+                        {
+                            run = false;
+                        }
+                        else if (userInput == 2)
+                        {
+                            double amountDue = transaction.GetAmountDue(transactionNumber);
+
+                            Console.WriteLine($"\nAmount Due: {amountDue}");
+                            Console.Write("\nEnter cash amount: ");
+                            double amountOfCashPayment = Convert.ToInt32(Console.ReadLine());
+
+                            while (amountOfCashPayment < amountDue)
+                            {
+                                Console.WriteLine($"\nInsufficient cash. Your amount due is {amountDue}.");
+                                Console.Write("\nEnter cash amount: ");
+                                amountOfCashPayment = Convert.ToInt32(Console.ReadLine());
+                            }
+
+                            double changeDue = amountOfCashPayment - amountDue;
+
+                            int totalQuantity = transaction.GetTotalQuantity(transactionNumber);
+
+                            string orders = transaction.GetOrdersList(transactionNumber, reader);
+
+                            transaction.SendTransactionToMySQL(transactionNumber, date, orders, totalQuantity, amountDue, amountOfCashPayment, changeDue);
+
+
+                            PrintReceipt(transactionNumber);
+                        }
+                    }
                 }
-
-                reader.Close();
             }
+            else
+            {
+                Console.WriteLine("\nBook not found. Please check BookID.");
+
+            }
+
+            reader.Close();
         }
+
 
 
     }
@@ -412,7 +424,7 @@ class Program
 
                 if (reader.Read())
                 {
-                    (string bookID, string title, string author, string genre, string publicationDate, string publisher, string isbn, double price, int stock, double totalValue) = book.GetBookDetails(reader);
+                    (string bookID, string title, string author, string genre, string publicationDate, string publisher, string isbn, double price, int stock, double totalValue) = book.GetBookDetails();
 
                     Console.WriteLine($"\nBook ID           : {bookID}");
                     Console.WriteLine($"Title             : {title}");
@@ -439,29 +451,68 @@ class Program
         }
     }
 
-    static void PrintReceipt(List<BookPurchase> purchases, List<Transaction> transactions, int i)
+    static void PrintReceipt(int transactionNumber)
     {
-        Transaction transaction = new Transaction();
-
-        Console.WriteLine("\n-----------------------------------------------------");
-        Console.WriteLine($"\nDate: {transactions[i].Date}");
-        Console.WriteLine($"Transaction Number: XXXXXXXX{transactions[i].TransactionNumber}");
-        Console.WriteLine($"\nQuantity     Title         Price");
-
-        foreach (var purchase in purchases)
+        using (MySqlConnection connection = new MySqlConnection("server=localhost;database=bookshop_management_system;user=root;password= ;"))
         {
-            Console.WriteLine($"  {purchase.OrderQuantity}     {purchase.Title}     {purchase.Price}");
+            try
+            {
+                MySqlDataReader reader = transaction.TransactionExists(transactionNumber);
+
+                if (reader.Read())
+                {
+                    (string date, int totalQuantity, double amountDue, double amountOfCashPayment, double changeDue) = transaction.GetTransactionDetails();
+
+                    Console.WriteLine("\n-----------------------------------------------------");
+                    Console.WriteLine($"\nDate: {date}");
+                    Console.WriteLine($"Transaction Number: XXXXXXXX{transactionNumber}");
+                    Console.WriteLine($"\nQuantity     Title         Price");
+
+                    try
+                    {
+                        connection.Open();
+                        string query = $"SELECT Title, Price, Quantity, TotalAmount FROM orders WHERE TransactionNumber = {transactionNumber}";
+                        MySqlCommand command = new MySqlCommand(query, connection);
+
+                        int i = 1;
+
+                        while (reader.Read())
+                        {
+                            string title = reader.GetString("Title");
+                            double price = reader.GetDouble("Price");
+                            int quantity = reader.GetInt32("Quantity");
+                            double totalAmount = reader.GetDouble("TotalAmount");
+
+                            Console.WriteLine($"\n{i}. Title");
+                            Console.WriteLine($"   {quantity}   {price}   {totalAmount}");
+                            i++;
+                        }
+
+                        reader.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                    }
+
+                    Console.WriteLine($"\nNumber of Items: {totalQuantity}");
+                    Console.WriteLine($"Amount Due: {amountDue}");
+                    Console.WriteLine($"Cash: {amountOfCashPayment}");
+                    Console.WriteLine($"Change Due: {changeDue}");
+                    Console.WriteLine("\n-----------------------------------------------------");
+                }
+                else
+                {
+                    Console.WriteLine($"Row with Transaction Number {transactionNumber} not found.");
+                }
+
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
         }
-
-        Console.WriteLine($"\nNumber of Items: {transactions[i].NumberOfItems}");
-        Console.WriteLine($"Amount Due: {transactions[i].AmountDue}");
-        Console.WriteLine($"Cash: {transactions[i].AmountOfCashPayment}");
-        Console.WriteLine($"Change Due: {transactions[i].ChangeDue}");
-        Console.WriteLine("\n-----------------------------------------------------");
-
-
     }
-
-
 
 }

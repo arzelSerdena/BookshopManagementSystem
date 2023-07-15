@@ -92,9 +92,13 @@ public class Book
 
     }
 
-    public (string bookID, string title, string author, string genre, string publicationDate, string publisher, string isbn, double price, int stock, double totalValue) GetBookDetails(MySqlDataReader reader)
+    public (string bookID, string title, string author, string genre, string publicationDate, string publisher, string isbn, double price, int stock, double totalValue) GetBookDetails()
     {
         connection.Open();
+        string query = "SELECT BookID, Title, Author, Genre, Publication_Date, Publisher, ISBN, Price, Stock, Total_Value FROM stocks";
+        MySqlCommand command = new MySqlCommand(query, connection);
+        MySqlDataReader reader = command.ExecuteReader();
+
         string bookID = reader.GetString("BookID");
         string title = reader.GetString("Title");
         string author = reader.GetString("Author");

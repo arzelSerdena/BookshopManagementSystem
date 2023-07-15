@@ -2,135 +2,169 @@ using MySql.Data.MySqlClient;
 
 public class Book
 {
+    public string connectionString = "server=localhost;database=bookshop_management_system;user=root;password= ;";
     // public string Title { get; set; }
     // public string Author { get; set; }
     // public string Genre { get; set; }
-    // public DateOnly PublicationDate { get; set; }
+    // public DateOnly YearPublished { get; set; }
     // public string Publisher { get; set; }
     // public string ISBN { get; set; }
     // public double Price { get; set; }
     // public int Stock { get; set; }
-    // public double TotalValue { get; set; }
+    // public double Value { get; set; }
     // public string ProductCode { get; set; }
 
-    // public Book(string title, string author, string genre, DateOnly publicationDate, string publisher, string isbn, double price, int stock, double totalValue, string productCode)
+    // public Book(string title, string author, string genre, DateOnly yearPublished, string publisher, string isbn, double price, int stock, double value, string productCode)
     // {
 
     //     Title = title;
     //     Author = author;
     //     Genre = genre;
-    //     PublicationDate = publicationDate;
+    //     YearPublished = yearPublished;
     //     Publisher = publisher;
     //     ISBN = isbn;
     //     Price = price;
     //     Stock = stock;
-    //     TotalValue = price * stock;
+    //     Value = price * stock;
     //     ProductCode = productCode;
     // }
 
-    MySqlConnection connection = new MySqlConnection("server=localhost;database=bookshop_management_system;user=root;password= ;");
-
-    public MySqlDataReader BookExists(string bookChoice)
+    public bool BookExists(int bookID)
     {
-        connection.Open();
-        string query = $"SELECT * FROM stocks WHERE BookID = {bookChoice}";
-        MySqlCommand command = new MySqlCommand(query, connection);
-        MySqlDataReader reader = command.ExecuteReader();
+        bool exists = false;
 
-        return reader;
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string query = $"SELECT * FROM stocks WHERE BookID = {bookID}";
+            MySqlCommand command = new MySqlCommand(query, connection);
+            int count = Convert.ToInt32(command.ExecuteScalar());
+
+            if (count > 0)
+            {
+                exists = true;
+            }
+        }
+        return exists;
     }
 
-    public void AddBook(string bookID, string title, string author, string genre, string publicationDate, string publisher, string isbn, double price, int stock, double totalValue)
+    public void AddBook(int bookID, string title, string author, string genre, string yearPublished, string publisher, string isbn, double price, int stock, double value)
     {
-        connection.Open();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
 
-        string query = $"INSERT INTO stocks (BookID, Title, Author, Genre, Publication_Date, Publisher, ISBN, Price, Stock, Total_Value) VALUES ({bookID}, {title}, {author}, {genre}, {publicationDate}, {publisher}, {isbn}, {price}, {stock}, {totalValue});";
-        MySqlCommand command = new MySqlCommand(query, connection);
-        command.ExecuteNonQuery();
+            string query = $"INSERT INTO stocks (BookID, Title, Author, Genre, YearPublished, Publisher, ISBN, Price, Stock, Value) VALUES ({bookID}, '{title}', '{author}', '{genre}', '{yearPublished}', '{publisher}', '{isbn}', {price}, {stock}, {value});";
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.ExecuteNonQuery();
+        }
     }
 
-    public int AddStock(string bookChoice, int currentStock, int quantityToAdd)
+    public int AddStock(int bookID, int currentStock, int quantityToAdd)
     {
-        connection.Open();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
 
-        int updatedStock = currentStock + quantityToAdd;
+            int updatedStock = currentStock + quantityToAdd;
 
-        string updateQuery = $"UPDATE stocks SET Stock = {updatedStock} WHERE BookID = {bookChoice}";
-        MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
-        int rowsAffected = updateCommand.ExecuteNonQuery();
+            string updateQuery = $"UPDATE stocks SET Stock = {updatedStock} WHERE BookID = {bookID}";
+            MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
+            int rowsAffected = updateCommand.ExecuteNonQuery();
 
-        return rowsAffected;
-    }
-    public int ReduceStock(string bookChoice, int currentStock, int quantityToRemove)
-    {
-        connection.Open();
-
-        int updatedStock = currentStock - quantityToRemove;
-
-        string updateQuery = $"UPDATE stocks SET Stock = {updatedStock} WHERE BookID = {bookChoice}";
-        MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
-        int rowsAffected = updateCommand.ExecuteNonQuery();
-
-        return rowsAffected;
+            return rowsAffected;
+        }
     }
 
-    public void RemoveBook(string bookChoice)
+    public int ReduceStock(int bookID, int currentStock, int quantityToRemove)
     {
-        connection.Open();
-        string query = $"DELETE FROM stocks WHERE BookID = {bookChoice}";
-        MySqlCommand command = new MySqlCommand(query, connection);
-        int rowsAffected = command.ExecuteNonQuery();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
 
+            int updatedStock = currentStock - quantityToRemove;
+
+            string updateQuery = $"UPDATE stocks SET Stock = {updatedStock} WHERE BookID = {bookID}";
+            MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
+            int rowsAffected = updateCommand.ExecuteNonQuery();
+
+            return rowsAffected;
+        }
     }
 
-    public void UpdateStockFromOrder(int stock, int orderQuantity, string bookChoice)
+    public void RemoveBook(int bookID)
     {
-        connection.Open();
-        string updateQuery = $"UPDATE stocks SET Stock = {stock - orderQuantity} WHERE BookID = {bookChoice}";
-        MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
-        int rowsAffected = updateCommand.ExecuteNonQuery();
-
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string query = $"DELETE FROM stocks WHERE BookID = {bookID}";
+            MySqlCommand command = new MySqlCommand(query, connection);
+            int rowsAffected = command.ExecuteNonQuery();
+        }
     }
 
-    public (string bookID, string title, string author, string genre, string publicationDate, string publisher, string isbn, double price, int stock, double totalValue) GetBookDetails()
+    public void UpdateStockFromOrder(int stock, int orderQuantity, int bookID)
     {
-        connection.Open();
-        string query = "SELECT BookID, Title, Author, Genre, Publication_Date, Publisher, ISBN, Price, Stock, Total_Value FROM stocks";
-        MySqlCommand command = new MySqlCommand(query, connection);
-        MySqlDataReader reader = command.ExecuteReader();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string updateQuery = $"UPDATE stocks SET Stock = {stock - orderQuantity} WHERE BookID = {bookID}";
+            MySqlCommand updateCommand = new MySqlCommand(updateQuery, connection);
+            int rowsAffected = updateCommand.ExecuteNonQuery();
+        }
+    }
 
-        string bookID = reader.GetString("BookID");
-        string title = reader.GetString("Title");
-        string author = reader.GetString("Author");
-        string genre = reader.GetString("Genre");
-        string publicationDate = reader.GetString("Publication_Date");
-        string publisher = reader.GetString("Publisher");
-        string isbn = reader.GetString("ISBN");
-        double price = reader.GetDouble("Price");
-        int stock = reader.GetInt32("Stock");
-        double totalValue = reader.GetDouble("Total_Value");
+    public (int bookID, string title, string author, string genre, string yearPublished, string publisher, string isbn, double price, int stock, double value) GetBookDetails()
+    {
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string query = "SELECT BookID, Title, Author, Genre, YearPublished, Publisher, ISBN, Price, Stock, Value FROM stocks";
+            MySqlCommand command = new MySqlCommand(query, connection);
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    int bookID = reader.GetInt32("BookID");
+                    string title = reader.GetString("Title");
+                    string author = reader.GetString("Author");
+                    string genre = reader.GetString("Genre");
+                    string yearPublished = reader.GetString("YearPublished");
+                    string publisher = reader.GetString("Publisher");
+                    string isbn = reader.GetString("ISBN");
+                    double price = reader.GetDouble("Price");
+                    int stock = reader.GetInt32("Stock");
+                    double value = reader.GetDouble("Value");
 
-        return (bookID, title, author, genre, publicationDate, publisher, isbn, price, stock, totalValue);
+                    return (bookID, title, author, genre, yearPublished, publisher, isbn, price, stock, value);
+                }
+
+                else
+                {
+                    throw new Exception("No book found.");
+                }
+
+            }
+        }
     }
 
     public string TestMySQLConnection()
     {
-        MySqlConnection connection = new MySqlConnection("server=localhost;database=bookshop_management_system;user=root;password= ;");
-
-        string message = " ";
-
-        try
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
             connection.Open();
-            message = "Connected to MySQL!";
-        }
-        catch (Exception ex)
-        {
-            message = "Error: " + ex.Message;
-        }
+            string message = " ";
 
-        return message;
+            try
+            {
+                message = "Connected to MySQL!";
+            }
+            catch (Exception ex)
+            {
+                message = "Error: " + ex.Message;
+            }
 
+            return message;
+        }
     }
-
 }

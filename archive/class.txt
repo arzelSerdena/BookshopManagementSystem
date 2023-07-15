@@ -203,3 +203,56 @@ class Program
         Console.WriteLine($"ISBN        : {books[bookChoice].ISBN}");
     }
 }
+
+// public string Title { get; set; }
+    // public string Author { get; set; }
+    // public string Genre { get; set; }
+    // public DateOnly YearPublished { get; set; }
+    // public string Publisher { get; set; }
+    // public string ISBN { get; set; }
+    // public double Price { get; set; }
+    // public int Stock { get; set; }
+    // public double Value { get; set; }
+    // public string ProductCode { get; set; }
+
+    // public Book(string title, string author, string genre, DateOnly yearPublished, string publisher, string isbn, double price, int stock, double value, string productCode)
+    // {
+
+    //     Title = title;
+    //     Author = author;
+    //     Genre = genre;
+    //     YearPublished = yearPublished;
+    //     Publisher = publisher;
+    //     ISBN = isbn;
+    //     Price = price;
+    //     Stock = stock;
+    //     Value = price * stock;
+    //     ProductCode = productCode;
+    // }
+
+
+    // public string Title { get; set; }
+    // public int OrderQuantity { get; set; }
+    // public double Price { get; set; }
+    // public double TotalAmount { get; set; }
+
+    // public Order(string title, double price, int orderQuantity, double totalAmount)
+    // {
+
+    //     Title = title;
+    //     Price = price;
+    //     OrderQuantity = orderQuantity;
+    //     TotalAmount = totalAmount;
+    // }
+
+    //TO DO
+
+    // public void VoidOrder()
+    // {
+
+    // }
+
+    // public void EditOrderQuantity()
+    // {
+
+    // }
